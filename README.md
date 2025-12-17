@@ -1,2 +1,2 @@
 # Snake
-Gonna make a snake game lol
+I finaly finished it lol
