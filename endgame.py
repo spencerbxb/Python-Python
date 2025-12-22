@@ -1,8 +1,10 @@
-def destroy_game(wn, players, food):
-    # destroy food
-    food.hideturtle()
-    food.clear()
-    food.goto(10000, 10000)
+def destroy_game(wn, players, foods):
+    # destroy foods
+    for food in foods:
+        food.hideturtle()
+        food.clear()
+        food.goto(10000, 10000)
+    foods.clear()
 
     for player in players:
         # destroy head

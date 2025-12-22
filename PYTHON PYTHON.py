@@ -51,15 +51,6 @@ DEFAULT_BACKGROUND = 11
 
 
 
-
-
-
-
-
-
-
-
-
 ############################################################
 # DO NOT CHANGE THE FOLLOWING VALUES
 ############################################################
@@ -109,7 +100,7 @@ def loop_constants():
 
 # Set settings constants
 def settings_vals_init():
-    settings_vals.Apples = DEFAULT_START_DELAY
+    settings_vals.Apples = DEFAULT_FOOD_AMOUNT
     settings_vals.Dimensions = DEFAULT_DIMENSIONS
     settings_vals.Speedup = DEFAULT_SPEEDUP
 

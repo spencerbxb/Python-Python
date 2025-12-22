@@ -37,9 +37,6 @@ def start_game(mode, wn):
 
     writing.mode(mode)
 
-    food = turtle.Turtle()
-    create.make_asset(food, 0, "circle", "red", 0, 100)
-
     segments = []
 
     if mode == 1:  # Single Player
@@ -60,12 +57,17 @@ def start_game(mode, wn):
             }
         ]
 
+        # Create multiple foods
+        foods = []
+        for _ in range(settings_vals.Apples):
+            loop.spawn_food(foods, players)
+
         def game_tick():
             if not Playing:
-                endgame.destroy_game(wn, players, food)
+                endgame.destroy_game(wn, players, foods)
                 return
 
-            loop.main_loop(wn, players, food)
+            loop.main_loop(wn, players, foods)
             wn.ontimer(game_tick, int(START_DELAY * 1000))
 
         game_tick()
@@ -104,12 +106,17 @@ def start_game(mode, wn):
             }
         ]
 
+        # Create multiple foods
+        foods = []
+        for _ in range(settings_vals.Apples):
+            loop.spawn_food(foods, players)
+
         def game_tick():
             if not Playing:
-                endgame.destroy_game(wn, players, food)
+                endgame.destroy_game(wn, players, foods)
                 return
 
-            loop.main_loop(wn, players, food)
+            loop.main_loop(wn, players, foods)
             wn.ontimer(game_tick, int(START_DELAY * 1000))
 
         game_tick()

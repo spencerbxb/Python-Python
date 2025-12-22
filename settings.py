@@ -2,10 +2,11 @@
 
 import settings_vals
 import setup
+import writing
 
 # Functions that modify settings
 def cycle_apples():
-    if settings_vals.Apples == 10:
+    if settings_vals.Apples >= 10:
         settings_vals.Apples = 1
     else:
         settings_vals.Apples += 1
@@ -33,5 +34,7 @@ def cycle_color(_wn, var_name):
         grid_max = settings_vals.grid_max
         grid_min = settings_vals.grid_min
         setup.draw_playfield(color, _wn)
+    else:
+        writing.write_settings()
 
     return color

@@ -5,6 +5,7 @@ import turtle
 import loop
 import dying
 import settings_vals
+import draw_snakes
 
 DEFAULT_DELAY = 0.1
 Delay = 0.1
@@ -228,6 +229,7 @@ def write_bottom():
 
 def write_settings():
     pen.clear()
+    draw_snakes.snakes_init(pen.screen)
     pen.penup()
 
     font_size = int(TEXT_SIZE / 1.5)

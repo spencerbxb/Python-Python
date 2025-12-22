@@ -4,6 +4,7 @@ import game_starter
 import game_engine
 import writing
 import settings
+import draw_snakes
 
 in_settings = False
 
@@ -66,8 +67,10 @@ def bind_space(_wn):
     if in_settings:
         in_settings = False
         writing.write_menu()
+        draw_snakes.destroy_snakes(_wn)
     elif game_engine.Playing:
         game_starter.end_game()
     else:
         in_settings = True
         writing.write_settings()
+        # draw_snakes.snakes_init(_wn)

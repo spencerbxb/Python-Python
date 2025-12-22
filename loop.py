@@ -34,33 +34,61 @@ def move_players(players):
         player["controller"].apply()
 
 # Manage food within the play space
-def check_food(players, food):
+def spawn_food(foods, players):
+    x = random.randint(-grid_cells, grid_cells) * 20
+    y = random.randint(-grid_cells, grid_cells) * 20
+    for _ in range(100):  # limit attempts to avoid infinite loop
+        valid = True
+        for p in players:
+            if p["head"].distance((x, y)) < 20:
+                valid = False
+                break
+            for seg in p["segments"]:
+                if seg.distance((x, y)) < 20:
+                    valid = False
+                    break
+        if valid:
+            for f in foods:
+                if f.distance((x, y)) < 20:
+                    valid = False
+                    break
+        if valid:
+            food = turtle.Turtle()
+            create.make_asset(food, 0, "circle", "red", x, y)
+            foods.append(food)
+            return
+        x = random.randint(-grid_cells, grid_cells) * 20
+        y = random.randint(-grid_cells, grid_cells) * 20
+    # If no valid position found after 100 attempts, skip spawning (rare case)
+
+def check_food(players, foods):
+    eaten_foods = set()
     for player in players:
         player["new_segments_this_tick"] = []
-
         head = player["head"]
-        segments = player["segments"]
+        for food in list(foods):  # iterate over copy to avoid issues
+            if head.distance(food) < 20 and food not in eaten_foods:
+                eaten_foods.add(food)
+                writing.update_score(False, player["id"], wn=None)
 
-        if head.distance(food) < 20:
-            writing.update_score(False, player["id"], wn=None)
+                # choose tail color by player id
+                if player["id"] == 0:
+                    color = settings_vals.fetch_color("p1t")
+                else:
+                    color = settings_vals.fetch_color("p2t")
 
-            # move food
-            x = random.randint(-grid_cells, grid_cells) * 20
-            y = random.randint(-grid_cells, grid_cells) * 20
-            food.goto(x, y)
+                # create new tail segment
+                seg = turtle.Turtle()
+                create.make_asset(seg, 0, "square", color, 0, 0)
+                player["segments"].append(seg)
+                player["new_segments_this_tick"].append(seg)
 
-            # choose tail color by player id
-            if player["id"] == 0:
-                color = settings_vals.fetch_color("p1t")
-            else:
-                color = settings_vals.fetch_color("p2t")
-
-            # create new tail segment
-            seg = turtle.Turtle()
-            create.make_asset(seg, 0, "square", color, 0, 0)
-            segments.append(seg)
-
-            player["new_segments_this_tick"] = [seg]
+    # Remove eaten foods and spawn new ones
+    for food in eaten_foods:
+        foods.remove(food)
+        food.hideturtle()
+    for _ in eaten_foods:
+        spawn_food(foods, players)
 
 def check_collisions(players, wn):
     # --- COLLISIONS ---
@@ -96,7 +124,7 @@ def check_collisions(players, wn):
 
 all_moving = False
 
-def main_loop(wn, players, food):
+def main_loop(wn, players, foods):
 
     global all_moving
 
@@ -117,7 +145,7 @@ def main_loop(wn, players, food):
             
             all_moving = True
 
-    check_food(players, food)
+    check_food(players, foods)
     move_players(players)
     check_collisions(players, wn)
 
